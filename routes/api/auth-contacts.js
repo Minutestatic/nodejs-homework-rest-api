@@ -13,7 +13,7 @@ import { validateBody } from "../../decorators/index.js";
 import {
   contactAddSchema,
   contactUpdateFavoriteSchema,
-} from "../../models/Contact.js";
+} from "../../utils/validation/contactValidationSchemas.js";
 
 const contactAddValidate = validateBody(contactAddSchema);
 const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);

@@ -1,9 +1,8 @@
-import Joi from "joi";
 import { Schema, model } from "mongoose";
 
 import { handleSaveError, runValidatorsAtUpdate } from "./hooks.js";
 
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+import { emailRegexp } from "../utils/validation/userValidationSchemas.js";
 
 const userSchema = new Schema(
   {
@@ -23,6 +22,9 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
+    avatarURL: {
+      type: String,
+    },
     token: String,
   },
   { versionKey: false, timestamps: true }
@@ -33,17 +35,6 @@ userSchema.post("save", handleSaveError);
 userSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
 
 userSchema.post("findOneAndUpdate", handleSaveError);
-
-export const userSingupSchema = Joi.object({
-  password: Joi.string().min(6).required(),
-  email: Joi.string().pattern(emailRegexp).required(),
-  subscription: Joi.string(),
-});
-
-export const userSinginSchema = Joi.object({
-  password: Joi.string().min(6).required(),
-  email: Joi.string().pattern(emailRegexp).required(),
-});
 
 const User = model("user", userSchema);
 
