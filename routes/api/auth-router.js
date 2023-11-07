@@ -9,10 +9,12 @@ import { validateBody } from "../../decorators/index.js";
 import {
   userSingupSchema,
   userSinginSchema,
+  userEmailSchema,
 } from "../../utils/validation/userValidationSchemas.js";
 
 const userSingupValidate = validateBody(userSingupSchema);
 const userSinginValidate = validateBody(userSinginSchema);
+const userEmailValidate = validateBody(userEmailSchema);
 
 const authRouter = express.Router();
 
@@ -21,6 +23,15 @@ authRouter.post(
   isEmptyBody,
   userSingupValidate,
   authController.singup
+);
+
+authRouter.get("/verify/:verificationToken", authController.verify);
+
+authRouter.post(
+  "/verify",
+  isEmptyBody,
+  userEmailValidate,
+  authController.resendVerifyEmail
 );
 
 authRouter.post(
